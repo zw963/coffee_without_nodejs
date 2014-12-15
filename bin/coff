@@ -7,7 +7,7 @@ if ARGV.first == '-e'
   CoffeeWithoutNodejs.compile(ARGV.shift)
 else
   if ARGV.empty?
-    `notify-send 'Starting coffee compiler.' -t 1000`
+    `notify-send 'Starting coffee compiler.' -t 1000` if system 'which notify-send &>/dev/null'
     Dir['**/*.coffee'].each {|f| CoffeeWithoutNodejs.compile(f) }
     CoffeeWithoutNodejs.watch!
   else

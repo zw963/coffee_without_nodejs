@@ -53,7 +53,7 @@ WRAPPER
 
         js_path
       rescue ExecJS::RuntimeError
-        `notify-send "#{File.basename(file)}" -t 1000`
+        `notify-send "#{File.basename(file)}" -t 1000` if system 'which notify-send &>/dev/null'
         puts "#{$!.backtrace[0]}: #{$!.message} (#{$!.class})", $!.backtrace[1..-1]
       end
 
