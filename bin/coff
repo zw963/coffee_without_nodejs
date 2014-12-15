@@ -4,7 +4,8 @@
 require 'coffee_without_nodejs'
 
 if ARGV.first == '-e'
-  CoffeeWithoutNodejs.compile(ARGV.shift)
+  ARGV.shift
+  CoffeeWithoutNodejs.compile(ARGV.first)
 else
   if ARGV.empty?
     `notify-send 'Starting coffee compiler.' -t 1000` if system 'which notify-send &>/dev/null'
