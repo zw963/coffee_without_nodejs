@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 module CoffeeWithoutNodejs
-  VERSION = [0, 0, 1]
+  VERSION = [0, 1, 0]
 
   class << VERSION
     def to_s
