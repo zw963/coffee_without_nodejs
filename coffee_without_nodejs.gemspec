@@ -20,5 +20,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'execjs','~>2.2'
   s.add_runtime_dependency 'rev','~>0.3'
+  s.add_runtime_dependency 'coderay','~>1.1'
   s.add_development_dependency 'ritual'
 end
