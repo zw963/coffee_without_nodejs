@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
+require 'coffee_without_nodejs'
+
+if ARGV.first == '-e'
+  CoffeeWithoutNodejs.compile(ARGV.shift)
+else
+  if ARGV.empty?
+    `notify-send 'Starting coffee compiler.' -t 1000`
+    Dir['**/*.coffee'].each {|f| CoffeeWithoutNodejs.compile(f) }
+    CoffeeWithoutNodejs.watch!
+  else
+    ARGV.each do |file|
+      if test ?d, file
+        Dir["#{file}/**/*.coffee"].each {|f| CoffeeWithoutNodejs.compile(f) }
+        CoffeeWithoutNodejs.watch!
+      else
+        content = CoffeeWithoutNodejs.compile(file).to_s
+        system "coderay -js #{content}" unless content.empty?
+      end
+    end
+  end
+end
