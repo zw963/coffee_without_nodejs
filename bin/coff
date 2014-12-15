@@ -5,7 +5,8 @@ require 'coffee_without_nodejs'
 
 if ARGV.first == '-e'
   ARGV.shift
-  CoffeeWithoutNodejs.compile(ARGV.first)
+  content = CoffeeWithoutNodejs.compile(ARGV.first)
+  system "echo \"#{content}\" |coderay -js" unless content.empty?
 else
   if ARGV.empty?
     `notify-send 'Starting coffee compiler.' -t 1000` if system 'which notify-send &>/dev/null'
@@ -13,12 +14,14 @@ else
     CoffeeWithoutNodejs.watch!
   else
     ARGV.each do |file|
+      fail "`#{file}' is not valid filename." unless File.exist? file
+
       if test ?d, file
         Dir["#{file}/**/*.coffee"].each {|f| CoffeeWithoutNodejs.compile(f) }
         CoffeeWithoutNodejs.watch!
       else
-        content = CoffeeWithoutNodejs.compile(file).to_s
-        system "coderay -js #{content}" unless content.empty?
+        js_file = CoffeeWithoutNodejs.compile(file).to_s
+        system "coderay -js \"#{js_file}\"" unless js_file.empty?
       end
     end
   end

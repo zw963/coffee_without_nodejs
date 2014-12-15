@@ -33,8 +33,8 @@ WRAPPER
         @coffee ||= ExecJS.compile(source)
       end
 
-      def compile(coffee_script, bare=true)
-        compiler.call(wrapper, coffeescript, bare: bare)
+      def compile(script, bare=true)
+        compiler.call(wrapper, script, bare: bare)
       end
 
       def compile_file(file, bare=true)

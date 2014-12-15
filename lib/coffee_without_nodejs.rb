@@ -7,8 +7,9 @@ require 'coffee_without_nodejs/watcher'
 module CoffeeWithoutNodejs
   def self.compile(js, bare=true)
     if File.file?(js)
-      CoffeeCompiler.compile_file(js, bare)
+      js_file = CoffeeCompiler.compile_file(js, bare)
       CoffeeWatcher.new(js)
+      js_file
     else
       CoffeeCompiler.compile(js, bare)
     end
