@@ -51,8 +51,8 @@ Or ...
 
     x = 100;
 
-This script is extract from [Alternative Script Suite](https://github.com/zw963/ass).
-You can found massive of useful and interesting bash/ruby script here.
+This gem is extract from [Alternative Script Suite](https://github.com/zw963/ass).
+You can found a lot of useful and interesting scripts here.
 
 ## Support
 
