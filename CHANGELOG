@@ -1,2 +1,4 @@
+== 0.2.0 2015-05-21
+  * Add $JS_SHEBANG enviroment variable support, when set, it content will prepend to generated js file.	
 == 0.1.0 2014-12-16
   * Initial version.
