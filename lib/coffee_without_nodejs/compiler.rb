@@ -46,7 +46,10 @@ WRAPPER
         source_files = file_path.relative_path_from(js_path.dirname).to_s
         generated_file = js_path.relative_path_from(js_path.dirname).to_s
 
-        File.open(js_path, 'wb') {|f| f.print compiler.call(wrapper, source_code, bare: bare), "\n//# sourceMappingURL=#{File.basename(map_path)}" }
+        File.open(js_path, 'wb') do |f|
+          f.print "#{ENV['JS_SHEBANG']}\n\n" if ENV['JS_SHEBANG']
+          f.print compiler.call(wrapper, source_code, bare: bare), "\n//# sourceMappingURL=#{File.basename(map_path)}"
+        end
         File.open(map_path, 'wb') {|f| f.print compiler.call(wrapper, source_code, sourceMap: true, sourceFiles: [source_files], generatedFile: generated_file)["v3SourceMap"] }
 
         puts "[1m[32m==>[0m #{js_path.relative_path_from(js_root.parent)}"
