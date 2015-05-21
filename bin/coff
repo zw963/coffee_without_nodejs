@@ -10,15 +10,13 @@ if ARGV.first == '-e'
 else
   if ARGV.empty?
     `notify-send 'Starting coffee compiler.' -t 1000` if system 'which notify-send &>/dev/null'
-    Dir['**/*.coffee'].each {|f| CoffeeWithoutNodejs.compile(f) }
     CoffeeWithoutNodejs.watch!
   else
     ARGV.each do |file|
       fail "`#{file}' is not valid filename." unless File.exist? file
 
       if test ?d, file
-        Dir["#{file}/**/*.coffee"].each {|f| CoffeeWithoutNodejs.compile(f) }
-        CoffeeWithoutNodejs.watch!
+        Dir.chdir(file) { CoffeeWithoutNodejs.watch! }
       else
         js_file = CoffeeWithoutNodejs.compile(file).to_s
         system "coderay -js \"#{js_file}\"" unless js_file.empty?

@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.executables                 = `git ls-files -- bin/*`.split("\n").map{|f| File.basename(f) }
 
   s.add_runtime_dependency 'execjs','~>2.2'
-  s.add_runtime_dependency 'rev','~>0.3'
+  s.add_runtime_dependency 'rb-inotify','~>0.9'
   s.add_runtime_dependency 'coderay','~>1.1'
   s.add_development_dependency 'ritual', '~>0.4'
 end
