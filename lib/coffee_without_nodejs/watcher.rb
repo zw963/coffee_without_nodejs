@@ -40,7 +40,11 @@ module CoffeeWithoutNodejs
     end
 
     def coffee_files
-      Dir["#@path/**/*.coffee"]
+      all_files = Dir["#@path/**/*.coffee"]
+      if ENV['COFFEE_NOT_WATCH_PATTERN']
+        all_files.reject! {|e| e =~ Regexp.union(ENV['COFFEE_NOT_WATCH_PATTERN']) }
+      end
+      all_files
     end
   end
 end
