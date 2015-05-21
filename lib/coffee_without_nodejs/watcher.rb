@@ -12,27 +12,35 @@ module CoffeeWithoutNodejs
       @notifier = INotify::Notifier.new
       @path = File.expand_path('.')
 
-      watch_files
+      start_watch_files
 
       @notifier.watch(@path, :moved_from, :moved_to, :create, :delete, :onlydir, :recursive) do |event|
         # skip temp file.
         next if event.name =~ /^\.#|^#.*\#$/
 
-        watch_files
+          start_watch_files
       end
 
-      puts @path
+      coffee_files.each do |file|
+        CoffeeWithoutNodejs.compile(file)
+      end
+
       # start loop.
       @notifier.run
+      puts 'CoffeeWatcher start successful.'
     end
 
     # watch all exist files modify event.
-    def watch_files
-      Dir["#@path/**/*.coffee"].each do |file|
+    def start_watch_files
+      coffee_files.each do |file|
         @notifier.watch(file, :modify) do
           CoffeeWithoutNodejs.compile(file)
         end
       end
+    end
+
+    def coffee_files
+      Dir["#@path/**/*.coffee"]
     end
   end
 end
