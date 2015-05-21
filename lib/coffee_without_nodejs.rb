@@ -5,11 +5,11 @@ require 'coffee_without_nodejs/compiler'
 require 'coffee_without_nodejs/watcher'
 
 module CoffeeWithoutNodejs
-  def self.compile(js, bare=true)
-    if File.file?(js)
-      CoffeeCompiler.compile_file(js, bare)
+  def self.compile(coffee, bare=true)
+    if File.file?(coffee)
+      CoffeeCompiler.compile_file(coffee, bare)
     else
-      CoffeeCompiler.compile(js, bare)
+      CoffeeCompiler.compile(coffee, bare)
     end
   end
 
