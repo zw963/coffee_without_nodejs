@@ -46,12 +46,18 @@ WRAPPER
 
         source_files = file_path.relative_path_from(js_path.dirname).to_s
         generated_file = js_path.relative_path_from(js_path.dirname).to_s
+        relative_map_path = map_path.relative_path_from(js_path.dirname).to_s
 
         File.open(js_path, 'wb') do |f|
           f.print "#{ENV['JS_SHEBANG']}\n\n" if ENV['JS_SHEBANG']
-          f.print compiler.call(wrapper, source_code, bare: bare), "\n//# sourceMappingURL=#{File.basename(map_path)}"
+          f.print compiler.call(wrapper, source_code, bare: bare), "\n//# sourceMappingURL=#{relative_map_path}"
         end
-        File.open(map_path, 'wb') {|f| f.print compiler.call(wrapper, source_code, sourceMap: true, sourceFiles: [source_files], generatedFile: generated_file)["v3SourceMap"] }
+        File.open(map_path, 'wb') do |f|
+          f.print compiler.call(wrapper, source_code,
+            sourceMap: true,
+            sourceFiles: [source_files],
+            generatedFile: generated_file)["v3SourceMap"]
+        end
 
         puts "[1m[32m==>[0m #{js_path.relative_path_from(root_dir)}"
 
@@ -67,16 +73,21 @@ WRAPPER
         path.descend do |x|
           if x.basename.to_s == 'coffee'
             js_path = path.sub('/coffee/', '/js/').sub(/\.js\.coffee$|\.coffee$/, '.js')
-            dirname = js_path.dirname
+            map_path = path.sub('/coffee/', '/.map/').sub(/\.js\.coffee$|\.coffee$/, '.js.map')
 
-            dirname.mkpath unless dirname.exist?
+            js_dir = js_path.dirname
+            map_dir = map_path.dirname
 
-            return [js_path, js_path.sub_ext('.map')]
+            js_dir.mkpath unless js_dir.exist?
+            map_dir.mkpath unless map_dir.exist?
+
+            return [js_path, map_path]
           end
         end
         # if not in coffee directory, rename it.
         js_path = path.sub(/\.js\.coffee$|\.coffee$/, '.js')
-        return [js_path, js_path.sub_ext('.map')]
+        map_path = js_path.sub_ext('.js.map').sub(/\/([^\/]+)$/, '/.\1')
+        return [js_path, map_path]
       end
     end
   end
