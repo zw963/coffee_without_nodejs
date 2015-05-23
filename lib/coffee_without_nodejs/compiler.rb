@@ -63,19 +63,20 @@ WRAPPER
       end
 
       def create_js_path_from(path)
+        # if in coffee directory, will create same level js directory.
         path.descend do |x|
           if x.basename.to_s == 'coffee'
-            js_root = x.sub(/\/coffee$/, '/js')
             js_path = path.sub('/coffee/', '/js/').sub(/\.js\.coffee$|\.coffee$/, '.js')
             dirname = js_path.dirname
 
             dirname.mkpath unless dirname.exist?
 
-            return [js_path, js_path.sub_ext('.map'), js_root]
+            return [js_path, js_path.sub_ext('.map')]
           end
         end
-        js = path.sub(/\.js\.coffee$|\.coffee$/, '.js')
-        return [js, js.sub_ext('.map')]
+        # if not in coffee directory, rename it.
+        js_path = path.sub(/\.js\.coffee$|\.coffee$/, '.js')
+        return [js_path, js_path.sub_ext('.map')]
       end
     end
   end
