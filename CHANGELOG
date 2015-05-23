@@ -1,8 +1,12 @@
+== 0.4.0 2015-05-24
+	* compile error output more clear.
+	* update coffee compiler to 1.9.2
+	* map file become invisible, you need add .map or .*.js.map file to gitignore.
 == 0.3.0 2015-05-22
-  * Removed: remove rev dependency, instead of rb-inotify gem.
-  * Added: new created/moved/deleted will add to/remove from watch list.
-  * Added: $COFFEE_NOT_WATCH_PATTERN env, to specify skipped subdirectory.
+	* Removed: remove rev dependency, instead of rb-inotify gem.
+	* Added: new created/moved/deleted will add to/remove from watch list.
+	* Added: $COFFEE_NOT_WATCH_PATTERN env, to specify skipped subdirectory.
 == 0.2.0 2015-05-21
-  * Add $JS_SHEBANG enviroment variable support, when set, it content will prepend to generated js file.
+	* Add $JS_SHEBANG enviroment variable support, when set, it content will prepend to generated js file.
 == 0.1.0 2014-12-16
-  * Initial version.
+	* Initial version.
