@@ -35,6 +35,8 @@ WRAPPER
 
       def compile(script, bare=true)
         compiler.call(wrapper, script, bare: bare)
+      rescue ExecJS::RuntimeError
+        puts $!.message
       end
 
       def compile_file(file, bare=true)
@@ -87,6 +89,11 @@ WRAPPER
         # if not in coffee directory, rename it.
         js_path = path.sub(/\.js\.coffee$|\.coffee$/, '.js')
         map_path = js_path.sub_ext('.js.map').sub(/\/([^\/]+)$/, '/.\1')
+
+        if path == js_path
+          warn 'filename extension is .coffee or .js.coffee?'
+          exit
+        end
         return [js_path, map_path]
       end
     end
