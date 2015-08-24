@@ -33,23 +33,22 @@ Install via Rubygems
     
 Or ...
 
-    $ coff some_coffee_directory
+    $ coff some_coffee_files_directory
 
 This will create corresponding js and source map file in same directory as coffee file live in.
 
-    [](http://zw963.github.io/snapshot11.png)
+![Monitor](http://zw963.github.io/snapshot11.png)
     
 If one directory named 'coffee' in you project root, and run `coff` in project root.
+will create two new `js` `.map` directory the same level as `coffee` directory,
+with cloned directory hierarchy, store js and source map individually.
     
     $ ls
      coffee/
      
     $ coff coffee
-
-    [](http://zw963.github.io/snapshot14.png)
-
-will create two new `js` `.map` directory the same level as `coffee` directory,
-with cloned directory hierarchy, store js and source map individually.
+    
+![Monitor](http://zw963.github.io/snapshot14.png)
 
 Or ...
 
@@ -58,7 +57,7 @@ This will output compiled js content to STDOUT with very pretty format.
 
     $ coff some_path/file1.coffee
 
-    [](http://zw963.github.io/snapshot11.png)
+![File](http://zw963.github.io/snapshot12.png)
 
 You still can use redirect `coff some_path/file1.coffee > another_path/file2.js` to
 save literal js outout to file2.js
@@ -82,7 +81,7 @@ You can found a lot of useful and interesting scripts here.
 
 ## History
 
-  See [CHANGELOG](https://github.com/zw963/coffee_without_nodejs/blob/master/CHANGELOG) for details.
+  More update info, please See [CHANGELOG](https://github.com/zw963/coffee_without_nodejs/blob/master/CHANGELOG) for details.
 
 ## Contributing
 
