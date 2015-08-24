@@ -67,7 +67,7 @@ WRAPPER
           puts "[1m[32m==>[0m #{js_path.relative_path_from(root_dir)}"
           js_path
         else
-          puts "[1m[32m==>[0m #{file_path}"
+          puts "[1m[32m==>[0m #{file_path}" if $stdout.tty?
           target_js_content
         end
       rescue ExecJS::RuntimeError

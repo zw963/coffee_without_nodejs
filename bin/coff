@@ -19,7 +19,10 @@ else
       fail "`#{file}' is not valid filename." unless File.exist? file
 
       content = CoffeeWithoutNodejs.compile(file).to_s
-      print CodeRay.scan(content, :js).terminal unless content.empty?
+      unless content.empty?
+        token = CodeRay.scan(content, :js)
+        print $stdout.tty? ? token.terminal : token.text
+      end
     end
   end
 end
