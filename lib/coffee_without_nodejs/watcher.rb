@@ -22,7 +22,7 @@ module CoffeeWithoutNodejs
       end
 
       coffee_files.each do |file|
-        CoffeeWithoutNodejs.compile(file)
+        CoffeeCompiler.compile_file(file, true, true)
       end
 
       # start loop.
@@ -34,7 +34,7 @@ module CoffeeWithoutNodejs
     def start_watch_files
       coffee_files.each do |file|
         @notifier.watch(file, :modify) do
-          CoffeeWithoutNodejs.compile(file)
+          CoffeeCompiler.compile_file(file, true, true)
         end
       end
     end
