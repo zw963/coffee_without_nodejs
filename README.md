@@ -23,28 +23,49 @@ Install via Rubygems
 
     $ gem install coffee_without_nodejs
 
-... or add to your Gemfile
+... or add in Gemfile
 
     gem "coffee_without_nodejs"
 
 ## Usage
 
-Create a directory `coffee` in you Project root, add any coffee script and directory as you want.
-And than, run `coff` in yours Project root.
-    
     $ coff
     
 Or ...
 
-You can provide one or more coffeescript file as arguments,
+    $ coff some_coffee_directory
 
-    $ coff coffee/models/product.coffee
+This will create corresponding js and source map file in same directory as coffee file live in.
 
-This will output compiled js content to STDOUT with very pretty format.
+    [](http://zw963.github.io/snapshot11.png)
+    
+If one directory named 'coffee' in you project root, and run `coff` in project root.
+    
+    $ ls
+     coffee/
+     
+    $ coff coffee
+
+    [](http://zw963.github.io/snapshot14.png)
+
+will create two new `js` `.map` directory the same level as `coffee` directory,
+with cloned directory hierarchy, store js and source map individually.
 
 Or ...
 
-`coff` command only support one arguments, `-e`.
+You always can provide one or more `some_file.coffee' file as arguments.
+This will output compiled js content to STDOUT with very pretty format.
+
+    $ coff some_path/file1.coffee
+
+    [](http://zw963.github.io/snapshot11.png)
+
+You still can use redirect `coff some_path/file1.coffee > another_path/file2.js` to
+save literal js outout to file2.js
+
+Or ...
+
+`coff` command only support one argument `-e`.
 
     $ coff -e 'x = 100'
     var x;
