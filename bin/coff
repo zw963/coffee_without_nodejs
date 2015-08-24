@@ -2,25 +2,24 @@
 # -*- coding: utf-8 -*-
 
 require 'coffee_without_nodejs'
+require 'coderay'
 
 if ARGV.first == '-e'
   ARGV.shift
-  content = CoffeeWithoutNodejs.compile(ARGV.first)
-  system "echo \"#{content}\" |coderay -js" unless content.empty?
+  content = CoffeeWithoutNodejs.compile(ARGV.first).to_s
+  print CodeRay.scan(content, :js).terminal unless content.empty?
 else
   if ARGV.empty?
     `notify-send 'Starting coffee compiler.' -t 1000` if system 'which notify-send &>/dev/null'
     CoffeeWithoutNodejs.watch!
+  elsif test 'd', ARGV.first
+    Dir.chdir(ARGV.first) { CoffeeWithoutNodejs.watch! }
   else
     ARGV.each do |file|
       fail "`#{file}' is not valid filename." unless File.exist? file
 
-      if test ?d, file
-        Dir.chdir(file) { CoffeeWithoutNodejs.watch! }
-      else
-        js_file = CoffeeWithoutNodejs.compile(file).to_s
-        system "coderay -js \"#{js_file}\"" unless js_file.empty?
-      end
+      content = CoffeeWithoutNodejs.compile(file).to_s
+      print CodeRay.scan(content, :js).terminal unless content.empty?
     end
   end
 end

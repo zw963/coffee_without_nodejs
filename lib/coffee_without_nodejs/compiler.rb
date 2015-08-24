@@ -14,7 +14,7 @@ module CoffeeWithoutNodejs
       end
 
       def wrapper
-        wrapper = <<-WRAPPER
+        <<-WRAPPER
 (function(script, options) {
     try {
         return CoffeeScript.compile(script, options);
@@ -39,31 +39,37 @@ WRAPPER
         puts $!.message
       end
 
-      def compile_file(file, bare=true)
+      def compile_file(file, bare=true, create_target_jsfile=false)
         root_dir = Pathname(Dir.pwd)
         file_path = Pathname(File.expand_path(file))
         source_code = file_path.read
 
-        js_path, map_path = create_js_path_from(file_path)
+        target_js_content = compiler.call(wrapper, source_code, bare: bare)
 
-        source_files = file_path.relative_path_from(js_path.dirname).to_s
-        generated_file = js_path.relative_path_from(js_path.dirname).to_s
-        relative_map_path = map_path.relative_path_from(js_path.dirname).to_s
+        if create_target_jsfile
+          js_path, map_path = create_js_path_from(file_path)
+          source_files = file_path.relative_path_from(js_path.dirname).to_s
+          generated_file = js_path.relative_path_from(js_path.dirname).to_s
+          relative_map_path = map_path.relative_path_from(js_path.dirname).to_s
 
-        File.open(js_path, 'wb') do |f|
-          f.print "#{ENV['JS_SHEBANG']}\n\n" if ENV['JS_SHEBANG']
-          f.print compiler.call(wrapper, source_code, bare: bare), "\n//# sourceMappingURL=#{relative_map_path}"
+          File.open(js_path, 'wb') do |f|
+            f.print "#{ENV['JS_SHEBANG']}\n\n" if ENV['JS_SHEBANG']
+            f.print target_js_content, "\n//# sourceMappingURL=#{relative_map_path}"
+          end
+
+          File.open(map_path, 'wb') do |f|
+            f.print compiler.call(wrapper, source_code,
+                                  sourceMap: true,
+                                  sourceFiles: [source_files],
+                                  generatedFile: generated_file)['v3SourceMap']
+          end
+
+          puts "[1m[32m==>[0m #{js_path.relative_path_from(root_dir)}"
+          js_path
+        else
+          puts "[1m[32m==>[0m #{file_path}"
+          target_js_content
         end
-        File.open(map_path, 'wb') do |f|
-          f.print compiler.call(wrapper, source_code,
-            sourceMap: true,
-            sourceFiles: [source_files],
-            generatedFile: generated_file)["v3SourceMap"]
-        end
-
-        puts "[1m[32m==>[0m #{js_path.relative_path_from(root_dir)}"
-
-        js_path
       rescue ExecJS::RuntimeError
         error_msg = "[#{file_path.relative_path_from(root_dir)}]: #{$!.message}"
         `notify-send "#{error_msg}" -t 5000` if system 'which notify-send &>/dev/null'
@@ -94,7 +100,7 @@ WRAPPER
           warn 'filename extension is .coffee or .js.coffee?'
           exit
         end
-        return [js_path, map_path]
+        [js_path, map_path]
       end
     end
   end
