@@ -12,6 +12,8 @@ module CoffeeWithoutNodejs
       @notifier = INotify::Notifier.new
       @path = File.expand_path('.')
 
+      Signal.trap(2) {|sig| Process.exit }
+
       start_watch_files
 
       @notifier.watch(@path, :moved_from, :moved_to, :create, :delete, :onlydir, :recursive) do |event|
