@@ -1,3 +1,7 @@
+== 0.5.0 2015-08-24
+	* When run coff as `coff some_name.coffee`,  will not create javascript file corresponding folder.
+          If that is what you want, run `coff some_directory` or `coff`.
+	* Code refactor, not depend on coderay command-line command.
 == 0.4.0 2015-05-24
 	* compile error output more clear.
 	* update coffee compiler to 1.9.2
