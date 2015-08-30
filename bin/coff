@@ -4,25 +4,47 @@
 require 'coffee_without_nodejs'
 require 'coderay'
 
-if ARGV.first == '-e'
+if File.pipe?($stdin)
+  content = CoffeeWithoutNodejs.compile($stdin.read).to_s
+  unless content.empty?
+    token = CodeRay.scan(content, :js)
+    print $stdout.tty? ? token.terminal : token.text
+  end
+  exit
+end
+
+if ARGV.empty?
+  `notify-send 'Starting coffee compiler.' -t 1000` if system 'which notify-send &>/dev/null'
+  CoffeeWithoutNodejs.watch!
+  exit
+end
+
+if ['-h', '--help'].include? ARGV.first
+  STDERR.puts 'coff -e "coffee script", to compile coffee to javascript.'
+  exit
+end
+
+if ['-e', '--eval'].include? ARGV.first
   ARGV.shift
   content = CoffeeWithoutNodejs.compile(ARGV.first).to_s
   print CodeRay.scan(content, :js).terminal unless content.empty?
-else
-  if ARGV.empty?
-    `notify-send 'Starting coffee compiler.' -t 1000` if system 'which notify-send &>/dev/null'
-    CoffeeWithoutNodejs.watch!
-  elsif test 'd', ARGV.first
-    Dir.chdir(ARGV.first) { CoffeeWithoutNodejs.watch! }
-  else
-    ARGV.each do |file|
-      fail "`#{file}' is not valid filename." unless File.exist? file
+  exit
+end
 
-      content = CoffeeWithoutNodejs.compile(file).to_s
-      unless content.empty?
-        token = CodeRay.scan(content, :js)
-        print $stdout.tty? ? token.terminal : token.text
-      end
-    end
+if test 'd', ARGV.first
+  Dir.chdir(ARGV.first) { CoffeeWithoutNodejs.watch! }
+  exit
+end
+
+ARGV.each do |file|
+  unless File.exist? file
+    puts "cannot open \`#{file}' for reading: No such file or directory, Skipping"
+    next
+  end
+
+  content = CoffeeWithoutNodejs.compile(file).to_s
+  unless content.empty?
+    token = CodeRay.scan(content, :js)
+    print $stdout.tty? ? token.terminal : token.text
   end
 end

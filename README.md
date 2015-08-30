@@ -64,12 +64,10 @@ save literal js outout to file2.js
 
 Or ...
 
-`coff` command only support one argument `-e`.
+You can run coffee script directly with: `-e` argments or pipe.
 
-    $ coff -e 'x = 100'
-    var x;
-
-    x = 100;
+![File](http://zw963.github.io/snapshot15.png)
+![File](http://zw963.github.io/snapshot16.png)
 
 This gem is extract from [Alternative Script Suite](https://github.com/zw963/ass).
 You can found a lot of useful and interesting scripts here.
